@@ -4,8 +4,9 @@ function countStudents(filePath) {
   let length = 0;
   const students = {};
   const fields = {};
+
   return new Promise((resolve, reject) => {
-    readFile(fileName, (error, data) => {
+    readFile(filePath, (error, data) => {
       if (error) {
         reject(Error('Cannot load the database'));
       } else {
