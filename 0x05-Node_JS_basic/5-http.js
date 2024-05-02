@@ -1,8 +1,8 @@
 const { readFile } = require('fs');
 const http = require('http');
 
-const HOST = '127.0.0.1';
-const PORT = 1245;
+const host = '127.0.0.1';
+const port = 1245;
 
 function countStudents(filePath) {
   let length = 0;
@@ -64,7 +64,7 @@ const app = http.createServer((req, res) => {
   }
 });
 
-app.listen(port, hostname, () => {
+app.listen(port, host, () => {
 });
 
 module.exports = app;
