@@ -1,7 +1,7 @@
 const express = require('express');
 const { readFile } = require('fs');
 
-const PORT = 1245;
+const port = 1245;
 const app = express();
 
 function countStudents(filePath) {
