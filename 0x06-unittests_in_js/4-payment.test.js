@@ -12,5 +12,8 @@ describe("sendPaymentRequestToApi", function() {
 
 	assert(spy.withArgs('The total is: 10').calledOnce);
 	assert(stub.withArgs("SUM", 100, 20).calledOnce);
+
+	stub.restore();
+	spy.retore();
     });
 });
