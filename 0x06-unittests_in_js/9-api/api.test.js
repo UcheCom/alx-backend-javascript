@@ -1,8 +1,8 @@
 const request = require('request');
+const url = 'http://localhost:7865';
 const assert = require('assert');
 
 describe('Index Page', function() {
-  const url = 'http://localhost:7865';
   it('returns the correct status code and results', function(done) {
     request.get(url, function(err, res, body) {
       assert.strictEqual(err, null);
