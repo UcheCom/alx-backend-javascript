@@ -1,3 +1,4 @@
+const {describe, it} = require("mocha");
 const sinon = require("sinon");
 const sendPaymentRequestToApi = require("./4-payment.js");
 const Utils = require("./utils.js");
