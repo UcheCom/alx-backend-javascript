@@ -15,6 +15,6 @@ describe("sendPaymentRequestToApi", function() {
 	sinon.assert.calledWith(stub, "SUM", 100, 20);
 
 	stub.restore();
-	spy.retore();
+	spy.restore();
     });
 });
