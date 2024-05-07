@@ -1,5 +1,6 @@
 const request = require('request');
 const url = 'http://localhost:7865';
+const { expect } = require('chai');
 const assert = require('assert');
 
 describe('Index Page', function() {
@@ -39,22 +40,15 @@ describe('Cart Page', function() {
 
 describe('Available Payments', function() {
   it('returns correct status code and result for /available_payments endpoint', function(done) {
-    request.get(`${url}/available_payments`, function(err, res, body) {
-      assert.strictEqual(err, null);
-      assert.strictEqual(res.statusCode, 200);
-      const actualResult = {
-        payment_methods: {
-          credit_cards: true,
-          paypal: false
-        },
-      };
-      assert.deepStrictEqual(JSON.parse(body), actualResult);
+    request.get(`${url}/available_payments`, function(err, res, body) {      expect(res.statusCode).to.be.equal(200);
+      expect(JSON.parse(body))
+        .to.be.deep.equal({payment_methods: {credit_cards: true, paypal: false}});
       done();
     });
   });
-});
-
-describe('Login Endpoint', function() {
+})
+      
+describe('Login Endpoint', function(done) {
   it('returns correct status code and result for /login endpoint', function(done) {
     const userName = 'Betty';
     const reqBody = { userName };
