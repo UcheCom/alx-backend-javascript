@@ -9,7 +9,7 @@ function countStudents(filePath) {
   const students = {};
   const fields = {};
 
-  return new Promise((resolve, reject) => {
+  return new promise((resolve, reject) => {
     readFile(filePath, (error, data) => {
       if (error) {
         reject(error);
