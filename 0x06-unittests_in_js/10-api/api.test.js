@@ -1,69 +1,53 @@
 const request = require('request');
-const url = 'http://localhost:7865';
 const { expect } = require('chai');
-const assert = require('assert');
 
-describe('Index Page', function() {
-  it('returns the correct status code and results', function(done) {
-    request.get(url, function(err, res, body) {
-      assert.strictEqual(err, null);
+describe('API integration test', () => {
+  const api_url = 'http://localhost:7865';
 
-      assert.strictEqual(res.statusCode, 200);
-
-      assert.strictEqual(body, 'Welcome to the payment system');
-
-      done();
-    });
-  });
-});
-
-describe('Cart Page', function() {
-  it('returns the correct status code and result when :id is a number', function(done) {
-    const cart_id = 20;
-    request.get(`${url}/cart/${cart_id}`, function(err, res, body) {
-      assert.strictEqual(err, null);
-      assert.strictEqual(res.statusCode, 200);
-      assert.strictEqual(body, `Payment methods for cart ${cart_id}`);
+  it('GET / returns correct response', (done) => {
+    request.get(`${api_url}/`, (err, res, body) => {
+      expect(res.statusCode).to.be.equal(200);
+      expect(body).to.be.equal('Welcome to the payment system');
       done();
     });
   });
 
-  it('returns 404 status code when :id is NOT a number', function(done) {
-    const invalidCart_id = 'about';
-    request.get(`${url}/cart/${invalidCart_id}`, function(err, res, body) {
-      assert.strictEqual(err, null);
-      assert.strictEqual(res.statusCode, 404);
+  it('GET /cart/:id returns correct response for valid :id', (done) => {
+    request.get(`${api_url}/cart/47`, (err, res, body) => {
+      expect(res.statusCode).to.be.equal(200);
+      expect(body).to.be.equal('Payment methods for cart 47');
       done();
     });
   });
-});
 
-describe('Available Payments', function() {
-  it('returns correct status code and result for /available_payments endpoint', function(done) {
-    request.get(`${url}/available_payments`, function(err, res, body) {      expect(res.statusCode).to.be.equal(200);
+  it('GET /cart/:id returns 404 response for negative number values in :id', (done) => {
+    request.get(`${api_url}/cart/-47`, (err, res, body) => {
+      expect(res.statusCode).to.be.equal(404);
+      done();
+    });
+  });
+
+  it('GET /cart/:id returns 404 response for non-numeric values in :id', (done) => {
+    request.get(`${api_url}/cart/d200-44a5-9de6`, (err, res, body) => {
+      expect(res.statusCode).to.be.equal(404);
+      done();
+    });
+  });
+
+  it('POST /login returns valid response', (done) => {
+    request.post(`${api_url}/login`, {json: {userName: 'Pinkbrook'}}, (_err, res, body) => {
+      expect(res.statusCode).to.be.equal(200);
+      expect(body).to.be.equal('Welcome Pinkbrook');
+      done();
+    });
+  });
+
+  it('GET /available_payments returns valid response', (done) => {
+    request.get(`${api_url}/available_payments`, (err, res, body) => {
+      expect(res.statusCode).to.be.equal(200);
       expect(JSON.parse(body))
         .to.be.deep.equal({payment_methods: {credit_cards: true, paypal: false}});
       done();
     });
-  });
-})
-      
-describe('Login Endpoint', function(done) {
-  it('returns correct status code and result for /login endpoint', function(done) {
-    const userName = 'Betty';
-    const reqBody = { userName };
-
-    request.post(
-      {
-        url: `${url}/login`,
-        json: reqBody,
-      },
-      function(err, res, body) {
-        assert.strictEqual(err, null);
-        assert.strictEqual(res.statusCode, 200);
-        assert.strictEqual(body, `Welcome ${userName}`);
-        done();
-      }
-    );
   });
 });
