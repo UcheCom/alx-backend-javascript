@@ -14,7 +14,7 @@ function countStudents(filePath) {
       if (error) {
         reject(error);
       } else {
-        let output = '';
+        let op = '';
         const lines = data.toString().split('\n');
         for (let i = 0; i < lines.length; i += 1) {
           if (lines[i]) {
@@ -32,14 +32,14 @@ function countStudents(filePath) {
             }
           }
         }
-	const l = length - 1;
-        output += `Number of students: ${l}\n`;
+	const len = length - 1;
+        op += `Number of students: ${len}\n`;
         for (const [k, v] of Object.entries(fields)) {
           if (k !== 'field') {
-            output += `Number of students in ${k}: ${v}. List: ${students[k].join(', ')}\n`;
+            op += `Number of students in ${k}: ${v}. List: ${students[k].join(', ')}\n`;
           }
         }
-        resolve(output);
+        resolve(op);
       }
     });
   });
@@ -54,9 +54,9 @@ const app = http.createServer((req, res) => {
   }
   if (req.url === '/students') {
     res.write('This is the list of our students\n');
-    countStudents(process.argv[2].toString()).then((output) => {
-      const outString = output.slice(0, -1);
-      res.end(outString);
+    countStudents(process.argv[2].toString()).then((op) => {
+      const content = op.slice(0, -1);
+      res.end(content);
     }).catch(() => {
       res.statusCode = 404;
       res.end('Cannot load the database');
